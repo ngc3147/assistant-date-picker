@@ -20,7 +20,7 @@
         }
         
         .container {
-            width: 400px; /* Keeping the 400px width for a better user experience */
+            width: 400px; 
             background-color: #fff;
             border-radius: 8px;
             padding: 20px;
@@ -35,7 +35,7 @@
             font-weight: bold;
         }
 
-        input[type="text"], select {
+        input[type="text"] {
             width: 100%;
             padding: 10px;
             margin-top: 10px;
@@ -91,12 +91,6 @@
 
         .send-button:hover {
             background-color: #333; /* Darker Charcoal */
-        }
-
-        /* Highlighted times in the dropdown */
-        select option:hover {
-            background-color: #a4929a; /* Custom lighter highlight */
-            color: white;
         }
 
         /* Popup after confirmation */
@@ -200,18 +194,27 @@
             document.getElementById('back-arrow').style.display = 'none';
         });
 
-        // Mock function to submit date/time after confirmation
+        // Submit date and time back to Voiceflow
         function submitDateTime() {
             const selectedDateTime = document.getElementById('confirmation-message').innerText.replace("You selected: ", "");
-            alert("Confirmed date and time: " + selectedDateTime);
+            const [date, time] = selectedDateTime.split(" at ");
+
+            // Create an object to send date and time back to Voiceflow
+            const result = {
+                date: date,
+                start_time: time
+            };
+
+            // Post message to Voiceflow
+            window.postMessage(JSON.stringify(result), "*");
+
+            // Show confirmation popup
             document.getElementById('popup-message').style.display = 'block';
 
             // Hide the popup after 2 seconds
             setTimeout(function() {
                 document.getElementById('popup-message').style.display = 'none';
             }, 2000);
-
-            // You would replace the alert with code to pass this data to Voiceflow or your backend
         }
     </script>
 </body>
