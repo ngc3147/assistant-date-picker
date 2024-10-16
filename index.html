@@ -153,7 +153,7 @@
         <!-- Confirmation Section -->
         <div class="confirmation" id="confirmation">
             <p id="confirmation-message"></p>
-            <button class="send-button" onclick="submitDateTime()">Confirm</button>
+            <button class="send-button" id="confirm-button">Confirm</button>
         </div>
 
         <!-- Popup Message -->
@@ -195,18 +195,19 @@
         });
 
         // Submit date and time back to Voiceflow
-        function submitDateTime() {
+        document.getElementById('confirm-button').addEventListener('click', function() {
             const selectedDateTime = document.getElementById('confirmation-message').innerText.replace("You selected: ", "");
             const [date, time] = selectedDateTime.split(" at ");
 
             // Create an object to send date and time back to Voiceflow
             const result = {
+                event: 'selectedDate',
                 date: date,
-                start_time: time
+                time: time
             };
 
             // Post message to Voiceflow
-            window.postMessage(JSON.stringify(result), "*");
+            window.parent.postMessage(result, "*");
 
             // Show confirmation popup
             document.getElementById('popup-message').style.display = 'block';
@@ -215,7 +216,7 @@
             setTimeout(function() {
                 document.getElementById('popup-message').style.display = 'none';
             }, 2000);
-        }
+        });
     </script>
 </body>
 </html>
