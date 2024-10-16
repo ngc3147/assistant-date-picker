@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date/Time Picker</title>
+    <!-- Link to Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* Font and general styling */
+        body { font-family: 'Pragmatica Extended', sans-serif; background-color: #f8f8f8; margin: 0; padding: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        
+        .container {
+            width: 400px;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-family: 'Pragmatica Extended', sans-serif;
+            color: #333;
+        }
+
+        h1, h3 {
+            color: #4a4a4a; /* Charcoal */
+            font-weight: bold;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Pragmatica Extended', sans-serif;
+            box-sizing: border-box;
+        }
+
+        .confirmation, .time-picker {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .time-picker select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .back-arrow {
+            display: inline-block;
+            cursor: pointer;
+            font-size: 16px;
+            color: #4a4a4a; /* Charcoal */
+            margin-top: -15px;
+            margin-bottom: 15px;
+        }
+
+        .back-arrow:hover {
+            color: #333; /* Darker Charcoal */
+        }
+
+        .box {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        .send-button {
+            display: inline-block;
+            background-color: #4a4a4a; /* Charcoal */
+            padding: 10px 20px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .send-button:hover {
+            background-color: #333; /* Darker Charcoal */
+        }
+
+        /* Highlighted times in the dropdown */
+        select option:hover {
+            background-color: #a4929a; /* Custom lighter highlight */
+            color: white;
+        }
+
+        /* Popup after confirmation */
+        .popup-message {
+            display: none;
+            color: #4a4a4a;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Select a Date and Time</h1>
+        
+        <!-- Back Arrow to go back to Calendar -->
+        <span class="back-arrow" id="back-arrow" style="display: none;">&#8592; Back to Calendar</span>
+
+        <!-- Date Picker Input -->
+        <div class="box">
+            <input type="text" id="datepicker" placeholder="Select Date">
+        </div>
+
+        <!-- Time Picker (Dropdown List) -->
+        <div class="time-picker" id="time-picker">
+            <h3>Select a Time</h3>
+            <select id="time-options">
+                <option value="5:00 PM">5:00 PM</option>
+                <option value="5:15 PM">5:15 PM</option>
+                <option value="5:30 PM">5:30 PM</option>
+                <option value="5:45 PM">5:45 PM</option>
+                <option value="6:00 PM">6:00 PM</option>
+                <option value="6:15 PM">6:15 PM</option>
+                <option value="6:30 PM">6:30 PM</option>
+                <option value="6:45 PM">6:45 PM</option>
+                <option value="7:00 PM">7:00 PM</option>
+                <option value="7:15 PM">7:15 PM</option>
+                <option value="7:30 PM">7:30 PM</option>
+                <option value="7:45 PM">7:45 PM</option>
+                <option value="8:00 PM">8:00 PM</option>
+                <option value="8:15 PM">8:15 PM</option>
+                <option value="8:30 PM">8:30 PM</option>
+                <option value="8:45 PM">8:45 PM</option>
+                <option value="9:00 PM">9:00 PM</option>
+                <option value="9:15 PM">9:15 PM</option>
+                <option value="9:30 PM">9:30 PM</option>
+                <option value="9:45 PM">9:45 PM</option>
+                <option value="10:00 PM">10:00 PM</option>
+                <option value="10:15 PM">10:15 PM</option>
+                <option value="10:30 PM">10:30 PM</option>
+                <option value="10:45 PM">10:45 PM</option>
+                <option value="11:00 PM">11:00 PM</option>
+                <option value="11:15 PM">11:15 PM</option>
+                <option value="11:30 PM">11:30 PM</option>
+                <option value="11:45 PM">11:45 PM</option>
+                <option value="12:00 AM">12:00 AM</option>
+            </select>
+        </div>
+
+        <!-- Confirmation Section -->
+        <div class="confirmation" id="confirmation">
+            <p id="confirmation-message"></p>
+            <button class="send-button" onclick="submitDateTime()">Confirm</button>
+        </div>
+
+        <!-- Popup Message -->
+        <div class="popup-message" id="popup-message">Thanks :)</div>
+    </div>
+
+    <!-- Link to Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // Initialize the Flatpickr Date Picker
+        flatpickr("#datepicker", {
+            noCalendar: false,  // Ensures the user first picks a date
+            dateFormat: "m/d/Y", // Format: MM/DD/YYYY
+            minDate: "today", // Restrict past dates
+            onClose: function(selectedDates, dateStr, instance) {
+                // When the user selects a date, show the time picker and the back arrow
+                document.getElementById('time-picker').style.display = 'block';
+                document.getElementById('back-arrow').style.display = 'inline-block';
+            }
+        });
+
+        // Function to handle time selection and show confirmation
+        document.getElementById('time-options').addEventListener('change', function() {
+            const selectedDate = document.getElementById('datepicker').value;
+            const selectedTime = this.value;
+
+            if (selectedDate && selectedTime) {
+                const formattedDateTime = `${selectedDate} at ${selectedTime}`;
+                document.getElementById('confirmation-message').innerText = "You selected: " + formattedDateTime;
+                document.getElementById('confirmation').style.display = 'block';
+            }
+        });
+
+        // Back to Calendar
+        document.getElementById('back-arrow').addEventListener('click', function() {
+            document.getElementById('time-picker').style.display = 'none';
+            document.getElementById('confirmation').style.display = 'none';
+            document.getElementById('back-arrow').style.display = 'none';
+        });
+
+        // Mock function to submit date/time after confirmation
+        function submitDateTime() {
+            const selectedDateTime = document.getElementById('confirmation-message').innerText.replace("You selected: ", "");
+            alert("Confirmed date and time: " + selectedDateTime);
+            document.getElementById('popup-message').style.display = 'block';
+
+            // Hide the popup after 2 seconds
+            setTimeout(function() {
+                document.getElementById('popup-message').style.display = 'none';
+            }, 2000);
+
+            // You would replace the alert with code to pass this data to Voiceflow or your backend
+        }
+    </script>
+</body>
+</html>
