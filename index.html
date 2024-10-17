@@ -166,62 +166,59 @@
     <!-- Link to Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        // Check if 'window' is available before posting a message
-        if (typeof window !== 'undefined') {
-            // Initialize the Flatpickr Date Picker
-            flatpickr("#datepicker", {
-                noCalendar: false,  // Ensures the user first picks a date
-                dateFormat: "m/d/Y", // Format: MM/DD/YYYY
-                minDate: "today", // Restrict past dates
-                onClose: function(selectedDates, dateStr, instance) {
-                    // When the user selects a date, show the time picker and the back arrow
-                    document.getElementById('time-picker').style.display = 'block';
-                    document.getElementById('back-arrow').style.display = 'inline-block';
-                }
-            });
+        // Initialize the Flatpickr Date Picker
+        flatpickr("#datepicker", {
+            noCalendar: false,  // Ensures the user first picks a date
+            dateFormat: "m/d/Y", // Format: MM/DD/YYYY
+            minDate: "today", // Restrict past dates
+            onClose: function(selectedDates, dateStr, instance) {
+                // When the user selects a date, show the time picker and the back arrow
+                document.getElementById('time-picker').style.display = 'block';
+                document.getElementById('back-arrow').style.display = 'inline-block';
+            }
+        });
 
-            // Function to handle time selection and show confirmation
-            document.getElementById('time-options').addEventListener('change', function() {
-                const selectedDate = document.getElementById('datepicker').value;
-                const selectedTime = this.value;
+        // Function to handle time selection and show confirmation
+        document.getElementById('time-options').addEventListener('change', function() {
+            const selectedDate = document.getElementById('datepicker').value;
+            const selectedTime = this.value;
 
-                if (selectedDate && selectedTime) {
-                    const formattedDateTime = `${selectedDate} at ${selectedTime}`;
-                    document.getElementById('confirmation-message').innerText = "You selected: " + formattedDateTime;
-                    document.getElementById('confirmation').style.display = 'block';
-                }
-            });
+            if (selectedDate && selectedTime) {
+                const formattedDateTime = `${selectedDate} at ${selectedTime}`;
+                document.getElementById('confirmation-message').innerText = "You selected: " + formattedDateTime;
+                document.getElementById('confirmation').style.display = 'block';
+            }
+        });
 
-            // Back to Calendar
-            document.getElementById('back-arrow').addEventListener('click', function() {
-                document.getElementById('time-picker').style.display = 'none';
-                document.getElementById('confirmation').style.display = 'none';
-                document.getElementById('back-arrow').style.display = 'none';
-            });
+        // Back to Calendar
+        document.getElementById('back-arrow').addEventListener('click', function() {
+            document.getElementById('time-picker').style.display = 'none';
+            document.getElementById('confirmation').style.display = 'none';
+            document.getElementById('back-arrow').style.display = 'none';
+        });
 
-            // Submit date and time back to Voiceflow
-            document.getElementById('confirm-button').addEventListener('click', function() {
-                const selectedDateTime = document.getElementById('confirmation-message').innerText.replace("You selected: ", "");
-                const [date, time] = selectedDateTime.split(" at ");
+        // Submit date and time back to Voiceflow
+        document.getElementById('confirm-button').addEventListener('click', function() {
+            const selectedDateTime = document.getElementById('confirmation-message').innerText.replace("You selected: ", "");
+            const [date, time] = selectedDateTime.split(" at ");
 
-                // Create an object to send date and time back to Voiceflow
-                const result = {
-                    date: date,
-                    start_time: time
-                };
+            // Create an object to send date and time back to Voiceflow
+            const result = {
+                date: date,
+                start_time: time
+            };
 
-                // Post message to Voiceflow
-                window.parent.postMessage(result, "*");
+            // Post message to Voiceflow
+            window.parent.postMessage(result, "*");
 
-                // Show confirmation popup
-                document.getElementById('popup-message').style.display = 'block';
+            // Show confirmation popup
+            document.getElementById('popup-message').style.display = 'block';
 
-                // Hide the popup after 2 seconds
-                setTimeout(function() {
-                    document.getElementById('popup-message').style.display = 'none';
-                }, 2000);
-            });
-        }
+            // Hide the popup after 2 seconds
+            setTimeout(function() {
+                document.getElementById('popup-message').style.display = 'none';
+            }, 2000);
+        });
     </script>
 </body>
 </html>
