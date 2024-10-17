@@ -47,7 +47,7 @@
             box-sizing: border-box;
         }
 
-        .confirmation, .time-picker {
+        .time-picker {
             margin-top: 20px;
             display: none;
         }
@@ -56,6 +56,8 @@
             width: 100%;
             padding: 10px;
             font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
 
         .back-arrow {
@@ -87,6 +89,7 @@
             cursor: pointer;
             border-radius: 5px;
             font-size: 14px;
+            margin-top: 20px;
         }
 
         .send-button:hover {
@@ -114,7 +117,7 @@
             <input type="text" id="datepicker" placeholder="Select Date">
         </div>
 
-        <!-- Time Picker (Dropdown List) -->
+        <!-- Time Picker (Scrollable Dropdown) -->
         <div class="time-picker" id="time-picker">
             <h3>Select a Time</h3>
             <select id="time-options">
@@ -201,9 +204,8 @@
 
             // Create an object to send date and time back to Voiceflow
             const result = {
-                event: 'selectedDate',
                 date: date,
-                time: time
+                start_time: time
             };
 
             // Post message to Voiceflow
