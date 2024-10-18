@@ -205,7 +205,8 @@
             // Create an object to send date and time back to Voiceflow
             const result = {
                 date: date,
-                start_time: time
+                start_time: time,
+                calendar_selection: 'done' // Add this line to trigger the capture block
             };
 
             // Post message to Voiceflow
