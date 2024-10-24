@@ -202,6 +202,9 @@
             .then(response => response.text())  // Now handling plain text (e.g., "Accepted")
             .then(data => {
                 console.log('Success:', data);
+                // Post selected date/time to Voiceflow
+                window.parent.postMessage(result, "*");
+
                 // Show confirmation popup
                 document.getElementById('popup-message').style.display = 'block';
                 setTimeout(function() {
