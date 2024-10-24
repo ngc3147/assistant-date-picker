@@ -202,6 +202,10 @@
             const selectedDateTime = document.getElementById('confirmation-message').innerText.replace("You selected: ", "");
             const [selectedDate, selectedTime] = selectedDateTime.split(" at ");
 
+            console.log("Confirm button clicked");
+            console.log("Selected Date:", selectedDate);
+            console.log("Selected Time:", selectedTime);
+
             // Create an object to send date and time to the webhook
             const result = {
                 selectedDate: selectedDate,
@@ -216,7 +220,7 @@
                 },
                 body: JSON.stringify(result), // Send the date and time as JSON
             })
-            .then(response => response.json())
+            .then(response => response.text())  // Now handling plain text (e.g., "Accepted")
             .then(data => {
                 console.log('Success:', data);
                 // Show confirmation popup
