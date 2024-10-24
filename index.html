@@ -197,28 +197,37 @@
             document.getElementById('back-arrow').style.display = 'none';
         });
 
-        // Submit date and time back to Voiceflow
+        // Submit date and time back to Voiceflow and the webhook
         document.getElementById('confirm-button').addEventListener('click', function() {
             const selectedDateTime = document.getElementById('confirmation-message').innerText.replace("You selected: ", "");
-            const [date, time] = selectedDateTime.split(" at ");
+            const [selectedDate, selectedTime] = selectedDateTime.split(" at ");
 
-            // Create an object to send date and time back to Voiceflow
+            // Create an object to send date and time to the webhook
             const result = {
-                date: date,
-                start_time: time,
-                calendar_selection: 'done' // Add this line to trigger the capture block
+                selectedDate: selectedDate,
+                selectedTime: selectedTime
             };
 
-            // Post message to Voiceflow
-            window.parent.postMessage(result, "*");
-
-            // Show confirmation popup
-            document.getElementById('popup-message').style.display = 'block';
-
-            // Hide the popup after 2 seconds
-            setTimeout(function() {
-                document.getElementById('popup-message').style.display = 'none';
-            }, 2000);
+            // Send the POST request to the webhook
+            fetch('https://hook.us1.make.com/qh131lkpyqz3qi3ydp8otc7xgv9qbl4w', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(result), // Send the date and time as JSON
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                // Show confirmation popup
+                document.getElementById('popup-message').style.display = 'block';
+                setTimeout(function() {
+                    document.getElementById('popup-message').style.display = 'none';
+                }, 2000);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
         });
     </script>
 </body>
