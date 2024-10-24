@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Date/Time Picker</title>
-    <!-- Link to Flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Link to the locally saved Flatpickr CSS -->
+    <link rel="stylesheet" href="./libs/flatpickr.min.css">
     <style>
         /* Font and general styling */
         body { 
@@ -124,11 +124,20 @@
             <label for="time-options">Time:</label>
             <select id="time-options" name="time-options">
                 <option value="5:00 PM">5:00 PM</option>
-                <option value="5:15 PM">5:15 PM</option>
                 <option value="5:30 PM">5:30 PM</option>
-                <option value="5:45 PM">5:45 PM</option>
                 <option value="6:00 PM">6:00 PM</option>
-                <!-- Add more options as needed -->
+                <option value="6:30 PM">6:30 PM</option>
+                <option value="7:00 PM">7:00 PM</option>
+                <option value="7:30 PM">7:30 PM</option>
+                <option value="8:00 PM">8:00 PM</option>
+                <option value="8:30 PM">8:30 PM</option>
+                <option value="9:00 PM">9:00 PM</option>
+                <option value="9:30 PM">9:30 PM</option>
+                <option value="10:00 PM">10:00 PM</option>
+                <option value="10:30 PM">10:30 PM</option>
+                <option value="11:00 PM">11:00 PM</option>
+                <option value="11:30 PM">11:30 PM</option>
+                <option value="12:00 AM">12:00 AM</option>
             </select>
         </div>
 
@@ -142,8 +151,8 @@
         <div class="popup-message" id="popup-message">Thanks :)</div>
     </div>
 
-    <!-- Link to Flatpickr JS -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- Link to the locally saved Flatpickr JS -->
+    <script src="./libs/flatpickr.min.js"></script>
     <script>
         // Initialize the Flatpickr Date Picker
         flatpickr("#datepicker", {
@@ -202,9 +211,6 @@
             .then(response => response.text())  // Now handling plain text (e.g., "Accepted")
             .then(data => {
                 console.log('Success:', data);
-                // Post selected date/time to Voiceflow
-                window.parent.postMessage(result, "*");
-
                 // Show confirmation popup
                 document.getElementById('popup-message').style.display = 'block';
                 setTimeout(function() {
