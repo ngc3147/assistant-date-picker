@@ -234,6 +234,13 @@
             .catch((error) => {
                 console.error('Error:', error);
             });
+
+            // Notify Voiceflow that selection is complete
+            window.parent.postMessage({
+                type: "selectionComplete",
+                selectedDate: selectedDate,
+                selectedTime: selectedTime
+            }, "*");
         });
     </script>
 </body>
