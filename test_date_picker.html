@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Date Picker</title>
+    <script src="https://ngc3147.github.io/DateTimePickerExtension/DateExtension.js"></script>
+</head>
+<body>
+    <div id="date-picker"></div>
+    <script>
+        // Render the date picker inside the "date-picker" div
+        window.DateExtension.render({
+            trace: { type: 'ext_date', payload: { name: 'ext_date' } },
+            element: document.getElementById("date-picker")
+        });
+
+        // Capture form submission and send data to Make webhook
+        const formContainer = document.querySelector('form');
+        formContainer.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const datetime = formContainer.querySelector('#meeting').value;
+            const [selectedDate, selectedTime] = datetime.split('T');
+            
+            // Send selected date and time to Make webhook
+            fetch('https://hook.us1.make.com/qh131lkpyqz3qi3ydp8otc7xgv9qbl4w', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ selectedDate, selectedTime })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log("Data sent successfully:", { selectedDate, selectedTime });
+                } else {
+                    console.error("Error sending data:", response.statusText);
+                }
+            })
+            .catch(error => console.error("Network error:", error));
+        });
+    </script>
+</body>
+</html>
